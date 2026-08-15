@@ -1,6 +1,6 @@
 plugins {
-    // FIXED: Changed 1.9-SNAPSHOT to 1.8-SNAPSHOT which actually exists on Fabric's servers!
-    id 'net.fabricmc.fabric-loom' version '1.8-SNAPSHOT'
+    // Official stable release built to support Gradle 9 and older obfuscated MC versions
+    id 'net.fabricmc.fabric-loom-remap' version '1.13'
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
@@ -44,4 +44,3 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions.jvmTarget = "17"
 }
-
