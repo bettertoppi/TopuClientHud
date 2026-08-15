@@ -27,7 +27,7 @@ jobs:
     - name: Set up Unified JDK Environment
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '21' # FIXED: Upgraded from 17 to 21 to give the plugin the environment it needs
         distribution: 'microsoft'
 
     - name: Setup Gradle Build Execution
