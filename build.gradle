@@ -1,19 +1,7 @@
-buildscript {
-    repositories {
-        // FIXED: Pointing to the exact maven subdomain
-        maven { url = "https://maven.fabricmc.net/" }
-        gradlePluginPortal()
-        mavenCentral()
-    }
-    dependencies {
-        // Loom 1.10-SNAPSHOT safely resolves class files up to Java 26
-        classpath "net.fabricmc:fabric-loom:1.10-SNAPSHOT"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
-    }
+plugins {
+    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
-
-apply plugin: "net.fabricmc.loom"
-apply plugin: "org.jetbrains.kotlin.jvm"
 
 // Fallback versions if none specified during matrix building
 def mcVersion = project.hasProperty('targetMc') ? project.property('targetMc') : "1.21.1"
@@ -28,7 +16,7 @@ base {
 }
 
 repositories {
-    maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://fabricmc.net" }
     mavenCentral()
 }
 
@@ -49,9 +37,10 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = mcVersion.contains("26.1.2") ? 26 : 17
+    it.options.release = mcVersion.contains("26.1.2") ? 21 : 17
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = mcVersion.contains("26.1.2") ? "26" : "17"
+    kotlinOptions.jvmTarget = mcVersion.contains("26.1.2") ? "21" : "17"
 }
+
