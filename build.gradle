@@ -1,5 +1,6 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    // Official modern plugin ID required to fix the "plugin not found" error on Gradle 9
+    id 'net.fabricmc.fabric-loom' version '1.9-SNAPSHOT'
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
@@ -16,7 +17,7 @@ base {
 }
 
 repositories {
-    maven { url = "https://fabricmc.net" }
+    maven { url = "https://maven.fabricmc.net/" }
     mavenCentral()
 }
 
@@ -37,10 +38,9 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = mcVersion.contains("26.1.2") ? 21 : 17
+    it.options.release = 17
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = mcVersion.contains("26.1.2") ? "21" : "17"
+    kotlinOptions.jvmTarget = "17"
 }
-
