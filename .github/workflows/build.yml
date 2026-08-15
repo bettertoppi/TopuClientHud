@@ -1,0 +1,46 @@
+name: Parallel Build TopuClient Matrix
+
+on: [push, pull_request]
+
+jobs:
+  build-matrix:
+    strategy:
+      matrix:
+        include:
+          - mc: "1.21.1"
+            yarn: "1.21.1+build.2"
+            api: "0.100.0+1.21"
+          - mc: "1.21.4"
+            yarn: "1.21.4+build.4"
+            api: "0.112.0+1.21.4"
+          - mc: "1.21.8"
+            yarn: "1.21.8+build.1"
+            api: "0.114.0+1.21.8"
+          - mc: "1.21.11"
+            yarn: "1.21.11+build.1"
+            api: "0.115.0+1.21.11"
+          - mc: "26.1.2"
+            yarn: "26.1.2+build.1"
+            api: "0.120.0+26.1.2"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Unified JDK Environment
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'microsoft'
+
+    - name: Setup Gradle Build Execution
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: Build Specific Version Framework
+      run: ./gradlew build -PtargetMc="${{ matrix.mc }}" -PtargetYarn="${{ matrix.yarn }}" -PtargetApi="${{ matrix.api }}" --no-daemon
+
+    - name: Upload Finished Mod File
+      uses: actions/upload-artifact@v4
+      with:
+        name: topuclient-utility-${{ matrix.mc }}
+        path: build/libs/*-1.0.0.jar
