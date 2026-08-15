@@ -1,13 +1,14 @@
 buildscript {
     repositories {
-        maven { url = "https://fabricmc.net" }
+        // FIXED: Pointing to the exact maven subdomain
+        maven { url = "https://maven.fabricmc.net/" }
         gradlePluginPortal()
         mavenCentral()
     }
     dependencies {
-        // Upgraded to 1.10-SNAPSHOT to support Java 26 / major version 69 bytecode merging
+        // Loom 1.10-SNAPSHOT safely resolves class files up to Java 26
         classpath "net.fabricmc:fabric-loom:1.10-SNAPSHOT"
-        classpath "org.jetbrains.kotlin:org.jetbrains.kotlin.gradle.plugin:1.9.22"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
     }
 }
 
@@ -27,7 +28,7 @@ base {
 }
 
 repositories {
-    maven { url = "https://fabricmc.net" }
+    maven { url = "https://maven.fabricmc.net/" }
     mavenCentral()
 }
 
@@ -48,7 +49,6 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // Dynamic runtime configuration for older version branches vs 2026 specifications
     it.options.release = mcVersion.contains("26.1.2") ? 26 : 17
 }
 
