@@ -37,7 +37,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: Build Specific Version Framework
-      run: ./gradlew build -PtargetMc="${{ matrix.mc }}" -PtargetYarn="${{ matrix.yarn }}" -PtargetApi="${{ matrix.api }}" --no-daemon
+      run: gradlew build -PtargetMc="${{ matrix.mc }}" -PtargetYarn="${{ matrix.yarn }}" -PtargetApi="${{ matrix.api }}" --no-daemon
 
     - name: Upload Finished Mod File
       uses: actions/upload-artifact@v4
