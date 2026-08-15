@@ -15,7 +15,7 @@ jobs:
             api: "0.112.0+1.21.4"
           - mc: "1.21.8"
             yarn: "1.21.8+build.1"
-            api: "0.114.0+1.21.8"
+            api: "0.133.4+1.21.8"
           - mc: "1.21.11"
             yarn: "1.21.11+build.1"
             api: "0.115.0+1.21.11"
@@ -27,7 +27,7 @@ jobs:
     - name: Set up Unified JDK Environment
       uses: actions/setup-java@v4
       with:
-        java-version: '21' # FIXED: Upgraded from 17 to 21 to give the plugin the environment it needs
+        java-version: '21'
         distribution: 'microsoft'
 
     - name: Setup Gradle Build Execution
