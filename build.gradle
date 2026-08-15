@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom-remap' version '1.9' // Updated for Gradle 9+ and 1.21 remapping
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
@@ -16,14 +16,14 @@ base {
 }
 
 repositories {
-    maven { url = "https://fabricmc.net" }
+    maven { url = "https://maven.fabricmc.net/" }
     mavenCentral()
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${mcVersion}"
     mappings "net.fabricmc:yarn:${yarnBuild}:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.15.11"
+    modImplementation "net.fabricmc:fabric-loader:0.19.3"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
     modImplementation "net.fabricmc.fabric-language-kotlin:fabric-language-kotlin:1.11.0+kotlin.1.9.22"
 }
@@ -37,9 +37,9 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = project.name.contains("26.1.2") ? 21 : 17
+    it.options.release = 17
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = project.name.contains("26.1.2") ? "21" : "17"
+    kotlinOptions.jvmTarget = "17"
 }
