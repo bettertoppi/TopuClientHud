@@ -1,10 +1,9 @@
 plugins {
-    // Official stable release built to support Gradle 9 and older obfuscated MC versions
-    id 'net.fabricmc.fabric-loom-remap' version '1.13'
+    // Official stable snapshot built to handle 1.21 remapping targets under Gradle 9
+    id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
-// Fallback versions if none specified during matrix building
 def mcVersion = project.hasProperty('targetMc') ? project.property('targetMc') : "1.21.1"
 def yarnBuild = project.hasProperty('targetYarn') ? project.property('targetYarn') : "1.21.1+build.2"
 def apiVersion = project.hasProperty('targetApi') ? project.property('targetApi') : "0.100.0+1.21"
