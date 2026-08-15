@@ -1,7 +1,17 @@
-plugins {
-    id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+buildscript {
+    repositories {
+        maven { url = "https://maven.fabricmc.net/" }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.fabricmc:fabric-loom:1.14-SNAPSHOT"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+    }
 }
+
+apply plugin: "net.fabricmc.loom"
+apply plugin: "org.jetbrains.kotlin.jvm"
 
 def mcVersion = project.hasProperty('targetMc') ? project.property('targetMc') : "1.21.1"
 def yarnBuild = project.hasProperty('targetYarn') ? project.property('targetYarn') : "1.21.1+build.2"
@@ -17,6 +27,8 @@ base {
 repositories {
     maven { url = "https://maven.fabricmc.net/" }
     mavenCentral()
+    // FIXED: Added Modrinth's official repository so we can find any Kotlin version safely
+    maven { url = "https://modrinth.com" }
 }
 
 dependencies {
@@ -25,8 +37,12 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:0.15.11"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
     
-    // FIXED: Corrected the library mapping string to an active version release
-    modImplementation "net.fabricmc.fabric-language-kotlin:fabric-language-kotlin:1.10.19+kotlin.1.9.22"
+    // FIXED: Dynamically matches the right Kotlin package based on the Minecraft target version
+    if (mcVersion == "1.21.1") {
+        modImplementation "maven.modrinth:fabric-language-kotlin:1.11.0+kotlin.1.9.22"
+    } else {
+        modImplementation "maven.modrinth:fabric-language-kotlin:1.13.0+kotlin.2.1.0"
+    }
 }
 
 processResources {
@@ -38,9 +54,9 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
+    it.options.release = 21
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = "21"
 }
