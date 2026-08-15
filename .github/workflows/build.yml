@@ -19,9 +19,6 @@ jobs:
           - mc: "1.21.11"
             yarn: "1.21.11+build.1"
             api: "0.115.0+1.21.11"
-          - mc: "26.1.2"
-            yarn: "26.1.2+build.1"
-            api: "0.120.0+26.1.2"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code Repository
@@ -30,7 +27,7 @@ jobs:
     - name: Set up Unified JDK Environment
       uses: actions/setup-java@v4
       with:
-        java-version: '25'
+        java-version: '17'
         distribution: 'microsoft'
 
     - name: Setup Gradle Build Execution
