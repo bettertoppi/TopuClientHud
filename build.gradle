@@ -1,5 +1,4 @@
 plugins {
-    // Official stable snapshot built to handle 1.21 remapping targets under Gradle 9
     id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
@@ -25,7 +24,9 @@ dependencies {
     mappings "net.fabricmc:yarn:${yarnBuild}:v2"
     modImplementation "net.fabricmc:fabric-loader:0.15.11"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
-    modImplementation "net.fabricmc.fabric-language-kotlin:fabric-language-kotlin:1.11.0+kotlin.1.9.22"
+    
+    // FIXED: Corrected the library mapping string to an active version release
+    modImplementation "net.fabricmc.fabric-language-kotlin:fabric-language-kotlin:1.10.19+kotlin.1.9.22"
 }
 
 processResources {
