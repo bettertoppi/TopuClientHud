@@ -1,7 +1,18 @@
-plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT' // Restored to the correct plugin ID for Gradle 9+
-    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+buildscript {
+    repositories {
+        maven { url = "https://fabricmc.net" }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        // Upgraded to 1.10-SNAPSHOT to support Java 26 / major version 69 bytecode merging
+        classpath "net.fabricmc:fabric-loom:1.10-SNAPSHOT"
+        classpath "org.jetbrains.kotlin:org.jetbrains.kotlin.gradle.plugin:1.9.22"
+    }
 }
+
+apply plugin: "net.fabricmc.loom"
+apply plugin: "org.jetbrains.kotlin.jvm"
 
 // Fallback versions if none specified during matrix building
 def mcVersion = project.hasProperty('targetMc') ? project.property('targetMc') : "1.21.1"
@@ -16,7 +27,7 @@ base {
 }
 
 repositories {
-    maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://fabricmc.net" }
     mavenCentral()
 }
 
@@ -37,9 +48,10 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
+    // Dynamic runtime configuration for older version branches vs 2026 specifications
+    it.options.release = mcVersion.contains("26.1.2") ? 26 : 17
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = mcVersion.contains("26.1.2") ? "26" : "17"
 }
