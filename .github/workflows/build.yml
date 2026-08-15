@@ -30,7 +30,7 @@ jobs:
     - name: Set up Unified JDK Environment
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '25'
         distribution: 'microsoft'
 
     - name: Setup Gradle Build Execution
@@ -44,4 +44,3 @@ jobs:
       with:
         name: topuclient-utility-${{ matrix.mc }}
         path: build/libs/*.jar
-
