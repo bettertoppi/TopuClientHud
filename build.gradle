@@ -1,9 +1,9 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version '1.9' // Updated for Gradle 9+ and 1.21 remapping
+    id 'fabric-loom' version '1.9-SNAPSHOT' // Restored to the correct plugin ID for Gradle 9+
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
-// Fallback versions if none specified during local building
+// Fallback versions if none specified during matrix building
 def mcVersion = project.hasProperty('targetMc') ? project.property('targetMc') : "1.21.1"
 def yarnBuild = project.hasProperty('targetYarn') ? project.property('targetYarn') : "1.21.1+build.2"
 def apiVersion = project.hasProperty('targetApi') ? project.property('targetApi') : "0.100.0+1.21"
@@ -23,7 +23,7 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${mcVersion}"
     mappings "net.fabricmc:yarn:${yarnBuild}:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.19.3"
+    modImplementation "net.fabricmc:fabric-loader:0.15.11"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
     modImplementation "net.fabricmc.fabric-language-kotlin:fabric-language-kotlin:1.11.0+kotlin.1.9.22"
 }
