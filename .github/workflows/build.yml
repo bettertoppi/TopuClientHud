@@ -37,10 +37,11 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: Build Specific Version Framework
-      run: gradlew build -PtargetMc="${{ matrix.mc }}" -PtargetYarn="${{ matrix.yarn }}" -PtargetApi="${{ matrix.api }}" --no-daemon
+      run: gradle build -PtargetMc="${{ matrix.mc }}" -PtargetYarn="${{ matrix.yarn }}" -PtargetApi="${{ matrix.api }}" --no-daemon
 
     - name: Upload Finished Mod File
       uses: actions/upload-artifact@v4
       with:
         name: topuclient-utility-${{ matrix.mc }}
-        path: build/libs/*-1.0.0.jar
+        path: build/libs/*.jar
+
