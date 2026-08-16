@@ -1,43 +1,27 @@
-name: Parallel Build TopuClient Matrix
+name: Build HUD Mod
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build-matrix:
-    strategy:
-      matrix:
-        include:
-          - mc: "1.21.1"
-            yarn: "1.21.1+build.2"
-            api: "0.100.0+1.21"
-          - mc: "1.21.4"
-            yarn: "1.21.4+build.4"
-            api: "0.112.0+1.21.4"
-          - mc: "1.21.8"
-            yarn: "1.21.8+build.1"
-            api: "0.133.4+1.21.8"
-          - mc: "1.21.11"
-            yarn: "1.21.11+build.1"
-            api: "0.115.0+1.21.11"
+  build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout Code Repository
+    - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Unified JDK Environment
+    - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
+        distribution: 'temurin'
         java-version: '21'
-        distribution: 'microsoft'
 
-    - name: Setup Gradle Build Execution
-      uses: gradle/actions/setup-gradle@v3
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
-    - name: Build Specific Version Framework
-      run: gradle build -PtargetMc="${{ matrix.mc }}" -PtargetYarn="${{ matrix.yarn }}" -PtargetApi="${{ matrix.api }}" --no-daemon
-
-    - name: Upload Finished Mod File
-      uses: actions/upload-artifact@v4
-      with:
-        name: topuclient-utility-${{ matrix.mc }}
-        path: build/libs/*.jar
+    - name: Build with Gradle
+      run: ./gradlew build --no-daemon
