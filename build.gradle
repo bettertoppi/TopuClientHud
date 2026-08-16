@@ -1,53 +1,33 @@
-buildscript {
-    repositories {
-        maven { url = "https://maven.fabricmc.net/" }
-        gradlePluginPortal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "net.fabricmc:fabric-loom:1.14-SNAPSHOT"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
-    }
+plugins {
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
-apply plugin: "net.fabricmc.loom"
-apply plugin: "org.jetbrains.kotlin.jvm"
-
-def mcVersion = project.hasProperty('targetMc') ? project.property('targetMc') : "1.21.1"
-def yarnBuild = project.hasProperty('targetYarn') ? project.property('targetYarn') : "1.21.1+build.2"
-def apiVersion = project.hasProperty('targetApi') ? project.property('targetApi') : "0.100.0+1.21"
-
-version = "${mcVersion}-1.0.0"
-group = 'net.topuclient'
-
-base {
-    archivesName = "topuclient-utility"
-}
+version = project.mod_version ?: "1.0.0"
+group = project.maven_group ?: "net.topuclient"
 
 repositories {
-    maven { url = "https://maven.fabricmc.net/" }
     mavenCentral()
-    // FIXED: Added Modrinth's official repository so we can find any Kotlin version safely
-    maven { url = "https://modrinth.com" }
+    // Add any additional repositories if needed (e.g., Modrinth, Terra, etc.)
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${mcVersion}"
-    mappings "net.fabricmc:yarn:${yarnBuild}:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.15.11"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${apiVersion}"
-    
-    // FIXED: Dynamically matches the right Kotlin package based on the Minecraft target version
-    if (mcVersion == "1.21.1") {
-        modImplementation "maven.modrinth:fabric-language-kotlin:1.11.0+kotlin.1.9.22"
-    } else {
-        modImplementation "maven.modrinth:fabric-language-kotlin:1.13.0+kotlin.2.1.0"
-    }
+    // To change versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API (uncomment if your mod requires fabric api)
+    // modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Kotlin language support for Fabric
+    modImplementation "net.fabricmc:fabric-language-kotlin:${project.kotlin_loader_version}"
 }
 
 processResources {
     inputs.property "version", project.version
-    filteringCharset "UTF-8"
+
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
@@ -57,6 +37,16 @@ tasks.withType(JavaCompile).configureEach {
     it.options.release = 21
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = "21"
+java {
+    // Loom will automatically attach sources jars to the generated dev jars
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archives_base_name}" }
+    }
 }
